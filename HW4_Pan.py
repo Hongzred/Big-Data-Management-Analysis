@@ -12,7 +12,7 @@ def extractComplaints(partId, complains):
 def main(sc):
 	rdd = sc.textFile('complaints_small.csv')
 	runner = sc.parallelize([1,2,3,4,5])
-	complaints = sc.textFile('complaints_small.csv',use_unicode=True).cache()
+	complaints = sc.textFile('complaints_small.csv',use_unicode=False).cache()
 	result = complaints.mapPartitionsWithIndex(extractComplaints) \
         .groupByKey() \
         .mapValues(lambda values: sum(values)) \
