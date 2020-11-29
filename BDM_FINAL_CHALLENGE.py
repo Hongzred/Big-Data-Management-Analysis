@@ -91,8 +91,8 @@ def main(sc):
     "R":5, "RICHMOND":5
 	}
 
-	cet = sc.textFile(CET_FN, use_unicode=False).cache()
-	vio = sc.textFile(VIO_FN, use_unicode=False).cache()
+	cet = sc.textFile(sys.argv[1], use_unicode=False).cache()
+	vio = sc.textFile(sys.argv[2], use_unicode=False).cache()
 	violation_data = vio.mapPartitionsWithIndex(extractViolation)
 	centerLine_data = cet.mapPartitionsWithIndex(extractCenterLine)
 	violation_location = centerLine_data.join(violation_data)
