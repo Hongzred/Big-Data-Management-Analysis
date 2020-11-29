@@ -1,4 +1,5 @@
 from pyspark import SparkContext
+import sys
 
 def extractComplaints(partId, complains):
     if partId == 0:
@@ -12,7 +13,7 @@ def extractComplaints(partId, complains):
 def main(sc):
 	rdd = sc.textFile('complaints_small.csv')
 	runner = sc.parallelize([1,2,3,4,5])
-	complaints = sc.textFile('complaints_small.csv',use_unicode=False).cache()
+	complaints = sc.textFile(sys.argv[1],use_unicode=False).cache()
 	result = complaints.mapPartitionsWithIndex(extractComplaints) \
         .groupByKey() \
         .mapValues(lambda values: sum(values)) \
@@ -21,9 +22,7 @@ def main(sc):
         .mapValues(lambda x: (sum(x),len(x), round(max(x)/sum(x)*100))) \
         .sortByKey() \
         .map(lambda x: [item for items in x for item in items]) \
-        .take(25)
-
-	result
+        .saveAsTextFile("complaints_output_raw")
 
 if __name__ == "__main__":
 	sc = SparkContext()
