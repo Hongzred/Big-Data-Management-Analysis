@@ -80,8 +80,8 @@ def extractCenterLine(partId, records):
 
 def main(sc):
 
-	CET_FN = 'Centerline_sample.csv'
-	VIO_FN = 'violation_sample.csv'
+	CET_FN = '/data/share/bdm/nyc_cscl.csv'
+	VIO_FN = '/data/share/bdm/nyc_parking_violations/2015.csv'
 
 	boroughCodes_map = {
     "MAN":1, "MH":1, "MN":1, "NEWY":1, "NEW":1,"Y":1,"NY":1,
@@ -91,8 +91,8 @@ def main(sc):
     "R":5, "RICHMOND":5
 	}
 
-	cet = sc.textFile(sys.argv[1], use_unicode=False).cache()
-	vio = sc.textFile(sys.argv[2], use_unicode=False).cache()
+	cet = sc.textFile(CET_FN, use_unicode=False).cache()
+	vio = sc.textFile(VIO_FN, use_unicode=False).cache()
 	violation_data = vio.mapPartitionsWithIndex(extractViolation)
 	centerLine_data = cet.mapPartitionsWithIndex(extractCenterLine)
 	violation_location = centerLine_data.join(violation_data)
