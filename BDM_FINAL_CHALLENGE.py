@@ -7,7 +7,7 @@ def to_house_num(houseNumRaw):
     arr = houseNumRaw.split('-')
     if arr[0].isdigit() and arr[1].isdigit():
       return (int(arr[0]),int(arr[1]))
-  elif houseNumRaw:
+  elif houseNumRaw.isdigit():
     return int(houseNumRaw)
   else:
     return 0
