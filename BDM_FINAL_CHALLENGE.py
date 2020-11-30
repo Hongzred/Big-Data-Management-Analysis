@@ -105,10 +105,18 @@ def main(sc):
 	violation_data = vio.mapPartitionsWithIndex(extractViolation)
 	centerLine_data = cet.mapPartitionsWithIndex(extractCenterLine)
 	violation_location = centerLine_data.join(violation_data)
-	result = violation_location \
-                  .filter(lambda x: isValid(x[1][0][1],x[1][1][0])) \
-                  .saveAsTextFile("test_output")
 
+    result = violation_location \
+                  .filter(lambda x: isValid(x[1][0][1],x[1][1][0])) \
+                  .mapValues(lambda x: ((x[0][0],x[1][1]), x[1][2])) \
+                  .map(lambda x: (x[1][0], x[1][1])) \
+                  .groupByKey() \
+                  .mapValues(lambda x: len(set(x))) \
+                  .map(lambda x: (x[0][0], (x[0][1], x[1]))) \
+                  .groupByKey() \
+                  .mapValues(lambda x: [item for item in x]) \
+                  .map(lambda x: (x[0], sorted(x[1], key=lambda tup: tup[0]))) \
+                  .saveAsTextFile("test_output2")
 
 if __name__ == "__main__":
 	sc = SparkContext()
