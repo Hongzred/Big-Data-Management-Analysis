@@ -27,10 +27,17 @@ def isValid(range, houseNum):
 
 
 def extractViolation(partId, records):
-  if partId == 0:
-    next(records)
+	if partId == 0:
+		next(records)
     import csv
     reader = csv.reader(records)
+    boroughCodes_map = {
+    "MAN":1, "MH":1, "MN":1, "NEWY":1, "NEW":1,"Y":1,"NY":1,
+    "BRONX":2, "BX":2,
+    "BK":3, "K":3,"KING":3,"KINGS":3,
+    "Q":4, "QN":4,"QNS":4, "QU":4, "QUEEN":4,
+    "R":5, "RICHMOND":5
+	}
     for row in reader:
       if len(row) >= 43:
         date = row[4][-4:]
@@ -46,10 +53,17 @@ def extractViolation(partId, records):
 
 
 def extractCenterLine(partId, records):
-  if partId == 0:
-    next(records)
+	if partId == 0:
+		next(records)
     import csv
     reader = csv.reader(records)
+    boroughCodes_map = {
+    "MAN":1, "MH":1, "MN":1, "NEWY":1, "NEW":1,"Y":1,"NY":1,
+    "BRONX":2, "BX":2,
+    "BK":3, "K":3,"KING":3,"KINGS":3,
+    "Q":4, "QN":4,"QNS":4, "QU":4, "QUEEN":4,
+    "R":5, "RICHMOND":5
+	}
     for row in reader:
       if len(row) >= 32:
         physical_id = row[1]
@@ -81,15 +95,8 @@ def extractCenterLine(partId, records):
 def main(sc):
 
 	CET_FN = '/data/share/bdm/nyc_cscl.csv'
-	VIO_FN = '/data/share/bdm/nyc_parking_violations/2015.csv'
+	VIO_FN = '/data/share/bdm/nyc_parking_violation/2015.csv'
 
-	boroughCodes_map = {
-    "MAN":1, "MH":1, "MN":1, "NEWY":1, "NEW":1,"Y":1,"NY":1,
-    "BRONX":2, "BX":2,
-    "BK":3, "K":3,"KING":3,"KINGS":3,
-    "Q":4, "QN":4,"QNS":4, "QU":4, "QUEEN":4,
-    "R":5, "RICHMOND":5
-	}
 
 	cet = sc.textFile(CET_FN, use_unicode=False).cache()
 	vio = sc.textFile(VIO_FN, use_unicode=False).cache()
