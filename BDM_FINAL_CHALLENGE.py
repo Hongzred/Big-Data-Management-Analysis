@@ -75,9 +75,9 @@ def extractCenterLine(partId, records):
       borough_code = int(row[13])
       street_label = row[10]
       full_label = row[28]
-      if borough_code and full_label and physical_id:
+      if borough_code and full_label and physical_id.isdigit():
         yield (borough_code, full_label), (physical_id, (left_lo, left_hi, right_lo, right_hi))
-      if borough_code and street_label and physical_id:
+      if borough_code and street_label and physical_id.isdigit():
         yield (borough_code, street_label), (physical_id, (left_lo, left_hi, right_lo, right_hi))
 
 
